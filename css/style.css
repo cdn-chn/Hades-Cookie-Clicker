@@ -1,0 +1,674 @@
+/* Author Caden Chan
+
+    Date: April 2nd, 2026
+
+    Description: This is the CSS file for our clicker game "Soul Collector". It defines the visual style and layout of the game, 
+    including colors, fonts, and the arrangement of elements on the screen. The design is inspired by a dark, mystical theme 
+    with a focus on greens and greys. The CSS includes styles for the main game area, panels, buttons, 
+    and the help overlay, we created a visually simple interface that makes the gameplay intuitive and engaging.
+*/
+
+:root {
+    /* BACKGROUNDS */
+    --bg-main: #0c1616;       /* Darkest background — body, item cards, achievement cards */
+    --bg-panel: #132422;      /* Slightly lighter — side panels, header, help overlay */
+
+    /* ACCENTS */
+    --soul-light: #17c082;    /* Bright green — stat values, item names, stat-item left border, counter-box label */
+    --gold: #1b9c73;          /* Darker green — upgrade costs, panel titles, achievement title, available card hover */
+
+    /* TEXT & BORDERS */
+    --text: #d0f2e3;          /* Light mint — main body text */
+    --border: #244741;        /* Dark teal — stats section border, slot borders */
+
+    /* UI ELEMENTS */
+    --accent-purple: #3a2c42; /* Dark purple — help button, close button, level tags, counter-box border, total souls display */
+    --accent-dark: #050908;   /* Near black — deep shadows behind panels */
+    --white: #f5f5f5;         /* Off white — help overlay headings and content text */
+    --lava-warm: #2d6b52;     /* Teal green */
+}
+
+* { box-sizing: border-box; image-rendering: pixelated; }
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-main);
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    height: 100vh;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header — never shrinks so it stays visible on all aspect ratios */
+.top-bar {
+    flex-shrink: 0;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-panel);
+    border-bottom: 4px solid #000;
+    padding: 0 20px;
+}
+
+/* Center the h1 exactly in the middle regardless of button */
+.top-bar h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+}
+
+/* Total Souls collected */
+#totalSoulsCollected {
+    position: absolute;
+    left: 0;
+    margin-left: 1rem;
+    z-index: 1;
+    padding: 8px 16px;
+    background-color: var(--accent-purple);
+    color: white;
+    border: 2px solid #000;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 5px;
+}
+
+/* Help button on the far right */
+.help-button {
+    margin-left: auto; /* push to far right */
+    position: relative; /* override absolute of h1 */
+    z-index: 1;
+    padding: 8px 16px;
+    background-color: var(--accent-purple);
+    color: white;
+    border: 2px solid #000;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.help-button:hover {
+    background-color: #3d7a5f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+}
+
+.help-button:active {
+    transform: translateY(2px);
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+/* ==================== HELP OVERLAY ==================== */
+
+#helpOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(7, 36, 25, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* above all other elements */
+    padding: 20px;
+}
+
+#helpOverlay.hidden {
+    display: none;
+}
+
+.help-title{
+    color: var(--white);
+}
+
+.help-content {
+    background: var(--bg-panel);
+    color: var(--white);
+    max-width: 700px;
+    width: 100%;
+    padding: 30px 20px;
+    border-radius: 10px;
+    position: relative;
+    overflow-y: auto;
+    max-height: 80%;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#closeHelp {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent-purple);
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+#closeHelp:hover {
+    background: blu;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+}
+
+#closeHelp:active {
+    transform: translateY(2px);
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+.help-content h2 {
+    margin-top: 0;
+    text-align: center;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-size: 1.3rem;
+}
+
+.help-content p, 
+.help-content ul {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 10px 0;
+}
+
+.help-content ul {
+    padding-left: 20px;
+}
+
+
+
+/* Layout Grid — takes remaining viewport height; min-height 0 allows it to shrink and avoid cropping header */
+.world-grid {
+    flex: 1 1 0;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    overflow: hidden;
+}
+
+.ui-panel {
+    background: var(--bg-panel);
+    margin: 10px;
+    padding: 20px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.left-panel { 
+    background: linear-gradient(135deg, #0f231c 0%, #172b23 100%); 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;}
+
+.right-panel { background: linear-gradient(135deg, #12261d 0%, #172b23 100%); }
+
+/* The Soul Orb */
+.click-zone {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    max-height: 50vh;
+}
+
+#scoreDisplay {
+    font-size: 2.5rem;
+    color: whitesmoke;
+    margin-top: 10px;
+    text-shadow: none;
+    font-weight: bold;
+}
+
+@keyframes floatUp {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-300px); }
+}
+
+.float-text {
+    position: absolute;
+    color: var(--white);
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 1.2rem;
+    pointer-events: none;
+    animation: floatUp 3s ease-out forwards;
+    z-index: 999;
+}
+
+@keyframes soulGlow {
+    0%   { box-shadow: 0 0 10px 5px rgba(23, 192, 130, 0.3); }
+    50%  { box-shadow: 0 0 25px 15px rgba(23, 192, 130, 0.7); }
+    100% { box-shadow: 0 0 10px 5px rgba(23, 192, 130, 0.3); }
+}
+
+.soul-pixel {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    cursor: default;
+    transition: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    scale: 1.5;
+    cursor: pointer;
+    border-radius: 50%;
+    animation: soulGlow 3.5s ease-in-out infinite;
+    transition: transform 0.1s ease;
+}
+
+.soul-pixel img{
+    border-radius: 100%;
+    box-shadow: #000;
+}
+
+.soul-pixel:active {
+  transform: scale(1.2); 
+}
+
+.soul-pixel img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.inner-glare {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.8);
+    display: none; /* remove glare */
+}
+
+/* Environment - Center Column */
+.env-panel {
+    position: relative;
+    min-height: 0;
+    background: #11121d;
+    border: 4px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.env-panel img {
+    width: 100%;
+    flex: 1 1 0;
+    min-height: 0;
+    object-fit: cover;
+    display: block;
+}
+
+/* Achievements Section */
+    
+.achievements-container {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.achievement-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.achievement-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: 100%;
+}
+
+.achievement-card {
+    background-color: var(--bg-main);
+    color: #d4dcd8;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    height: 100%;
+}
+
+/* Message Area */
+.message-area {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
+.message-area.show {
+    opacity: 1;
+}
+
+.congrats-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #4ecdc4;
+    color: #121815;
+    padding: 20px 40px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.congrats-popup.hidden {
+    display: none;
+}
+
+
+
+
+/* Counter & Info Sections */
+.counter-box {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(74, 111, 95, 0.15));
+    border: 3px solid var(--accent-purple);
+    padding: 15px;
+    text-align: center;
+    box-shadow: none;
+}
+
+.counter-box h3 {
+    margin: 0 0 8px 0;
+    font-size: 0.85rem;
+    color: var(--soul-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.counter-box #soul-count {
+    font-size: 2.5rem;
+    color: var(--gold);
+    font-weight: bold;
+    display: block;
+    text-shadow: none;
+}
+
+.stats-section {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(58, 77, 68, 0.2));
+    border: 2px solid var(--border);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 3px solid var(--soul-light);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #7a8a82;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    color: var(--soul-light);
+    font-weight: bold;
+}
+
+/* Panel Labels */
+.panel-label {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    font-size: 0.95rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--gold);
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.item-card {
+    background: var(--bg-main);
+    border: 3px solid #000;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.item-card::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.item-card.available {
+    background: linear-gradient(135deg, #0f1714 0%, #1a2a20 100%); /* Dark greens — “affordable” upgrade card */
+    border-color: #3a4d44;
+}
+
+.item-card.available:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 15px rgba(122, 138, 133, 0.3), inset 0 0 10px rgba(95, 190, 159, 0.1);
+    transform: translateX(4px);
+}
+
+.item-card.available:hover::before {
+    left: 100%;
+}
+
+.item-card.locked {
+    opacity: 0.4;
+    background: #0d1410;
+    border-color: #1a1a2e; /* Dark blue-grey — “disabled” border */
+    cursor: not-allowed;
+}
+
+.item-card.locked:hover {
+    border-color: #1a1a2e;
+    box-shadow: none;
+    transform: none;
+}
+
+.item-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    box-shadow: none;
+}
+
+.item-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+}
+
+.item-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+    gap: 3px;
+}
+
+.item-meta .name {
+    font-weight: bold;
+    color: var(--soul-light);
+    font-size: 0.95rem;
+}
+
+.item-meta .description {
+    color: #8a9a92;
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+.item-meta .cost {
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.level-tag {
+    background: var(--accent-purple);
+    color: white;
+    padding: 4px 8px;
+    border: 1px solid #000; /* Black — outline for “Lv N” badge */
+    font-size: 0.75rem;
+    font-weight: bold;
+    flex-shrink: 0;
+    box-shadow: none;
+}
+
+
+.achievement-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--gold);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+    gap: 8px;
+}
+
+.achievement-description{
+    font-size: 0.75rem;
+    color: #8a9a92;
+    margin-top: 4px;
+}
+
+.achievement-card{
+    background-color: #12261d;
+    opacity: 0.4;
+}
+
+
+.slot {
+    width: 45px;
+    height: 45px;
+    background: #0a0a12;
+    border: 2px solid var(--border);
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.slot:hover {
+    border-color: var(--border);
+}
+
+.slot.earned {
+    color: var(--gold);
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(122, 138, 133, 0.05), rgba(95, 190, 159, 0.02));
+    box-shadow: none;
+}
+
+/* Image formatter */
+.earned-check {
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.earned-check img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+}
+
+
+/* ==================== HEADER BUTTON GROUPING ==================== */
+
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+    position: relative;
+}
+
+/* Specific style for the Save & Quit button to differentiate it from Help */
+.quit-button {
+    background-color: #6e1c24 !important; /* Dark red/maroon */
+    margin-left: 0 !important;
+}
+
+.quit-button:hover {
+    background-color: #a32935 !important;
+}

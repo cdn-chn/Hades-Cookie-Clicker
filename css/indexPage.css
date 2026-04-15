@@ -1,0 +1,179 @@
+/*
+    Author: Caden Chan
+    Date: April 2nd, 2026
+    Description: indexPage.css — Styles specific to index.php (login/register page)
+    and leaderboard.php. Extends the base style.css with layout and components for
+    the login card, form elements, error messages, and the submit button.
+    Uses a frosted-glass card over a full-screen background image to match the
+    dark Hades theme established in style.css.
+*/
+
+/* ==================== LOGIN PAGE LAYOUT ==================== */
+
+.login-body {
+    overflow: auto;
+    /* Full-screen background image — place your image in images/ and update the name below */
+    background-image: url('../images/indexPageAiWall.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Dark tint overlay so the background doesn't overpower the card */
+.login-body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 18, 14, 0.65);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.login-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+    /* sit above the dark overlay */
+}
+
+/* ==================== LOGIN CARD ==================== */
+
+.login-card {
+    /* Frosted glass effect */
+    background: rgba(19, 36, 34, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(23, 192, 130, 0.25);
+    transform: translateY(-20px);
+    border-radius: 14px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(23, 192, 130, 0.08) inset;
+}
+
+.login-title {
+    margin: 0 0 6px 0;
+    font-size: 1.4rem;
+    color: var(--soul-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.login-subtitle {
+    margin: 0 0 28px 0;
+    font-size: 0.8rem;
+    color: #7a8a82;
+    text-align: center;
+    font-style: italic;
+}
+
+/* ==================== FORM ELEMENTS ==================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.label-note {
+    font-size: 0.7rem;
+    color: #7a8a82;
+    text-transform: none;
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: 0;
+}
+
+.form-group input {
+    background: var(--bg-main);
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+}
+
+.form-group input::placeholder {
+    color: #3a4d44;
+}
+
+.form-group input:focus {
+    border-color: var(--soul-light);
+    box-shadow: 0 0 10px rgba(23, 192, 130, 0.2);
+}
+
+/* Style the date picker icon to match theme */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(3) hue-rotate(100deg);
+    cursor: pointer;
+}
+
+/* ==================== ERROR MESSAGE ==================== */
+
+.error-message {
+    background: rgba(200, 50, 50, 0.15);
+    border: 2px solid #c83232;
+    border-radius: 5px;
+    color: #f08080;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+/* ==================== SUBMIT BUTTON ==================== */
+
+.enter-button {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent-purple);
+    color: var(--white);
+    border: 2px solid #000;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+.enter-button:hover {
+    background-color: #3d7a5f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.enter-button:active {
+    transform: translateY(2px);
+    box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
