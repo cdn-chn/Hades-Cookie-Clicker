@@ -1,1 +1,1 @@
-# Hades-Cookie-Clicker
+#Soul Collector - COOKIE CLICKER INSPIRED
